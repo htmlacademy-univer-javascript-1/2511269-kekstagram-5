@@ -11,7 +11,7 @@ const handlePictureClick = (e, pictures) => {
   }
 
   e.preventDefault();
-  const photo = pictures.find((item) => item.id === parseInt(picture.dataset.pictureId));
+  const photo = pictures.find((item) => item.id === parseInt(picture.dataset.pictureId, 10));
 
   if (photo) {
     openPictureModal(photo);

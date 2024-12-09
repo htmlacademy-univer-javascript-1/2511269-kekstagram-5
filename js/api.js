@@ -17,15 +17,15 @@ const errorMessages = {
 
 const request = async (route, errorMessage, method, body = null) => {
   try {
-    const res = await await fetch(BASE_URL + route, { method, body })
-    if (!res.ok) { 
+    const res = await fetch(BASE_URL + route, {method, body});
+    if (!res.ok) {
       throw new Error();
     }
     return res.json();
   } catch {
     throw new Error(errorMessage);
   }
-}
+};
 
 const submitData = async(body) => await request(routes.POST, errorMessages.POST, httpMethod.POST, body);
 const fetchData = async() => await request(routes.GET, errorMessages.GET, httpMethod.GET);

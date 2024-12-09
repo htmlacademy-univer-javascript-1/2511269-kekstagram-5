@@ -31,7 +31,7 @@ const displayComments = () => {
 
   const fragment = document.createDocumentFragment();
 
-  allComments.slice(0, visibleComments).forEach(commentData => {
+  allComments.slice(0, visibleComments).forEach((commentData) => {
     const comment = generateCommentElement(commentData);
     fragment.append(comment);
   });
@@ -59,6 +59,13 @@ const handleKeydown = (e) => {
   }
 };
 
+function closePictureModal() {
+  visibleComments = 0;
+  pictureModal.classList.add('hidden');
+  pageBody.classList.remove('modal-open');
+  document.removeEventListener('keydown', handleKeydown);
+}
+
 const openPictureModal = (data) => {
   allComments = data.comments;
   document.addEventListener('keydown', handleKeydown);
@@ -66,17 +73,10 @@ const openPictureModal = (data) => {
   loadMoreCommentsButton.classList.add('hidden');
   pictureModal.classList.remove('hidden');
   renderPictureInfo(data);
-  
+
   if (allComments.length > 0) {
     displayComments();
   }
-};
-
-const closePictureModal = () => {
-  visibleComments = 0;
-  pictureModal.classList.add('hidden');
-  pageBody.classList.remove('modal-open');
-  document.removeEventListener('keydown', handleKeydown);
 };
 
 closeButton.addEventListener('click', closePictureModal);

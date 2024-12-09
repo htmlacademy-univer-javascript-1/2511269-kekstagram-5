@@ -1,4 +1,4 @@
-const effects = {
+const EFFECTS_FILTER = {
   NONE: 'none',
   GRAYSCALE: 'chrome',
   SEPIA: 'sepia',
@@ -7,51 +7,57 @@ const effects = {
   BRIGHTNESS: 'heat',
 };
 
-const filterStyles = {
-  [effects.GRAYSCALE]: { style: 'grayscale', unit: '' },
-  [effects.SEPIA]: { style: 'sepia', unit: '' },
-  [effects.INVERT]: { style: 'invert', unit: '%' },
-  [effects.BLUR]: { style: 'blur', unit: 'px' },
-  [effects.BRIGHTNESS]: { style: 'brightness', unit: '' },
+const EFFECTS_CONFIG = {
+  [EFFECTS_FILTER.GRAYSCALE]: { style: 'grayscale', unit: '' },
+  [EFFECTS_FILTER.SEPIA]: { style: 'sepia', unit: '' },
+  [EFFECTS_FILTER.INVERT]: { style: 'invert', unit: '%' },
+  [EFFECTS_FILTER.BLUR]: { style: 'blur', unit: 'px' },
+  [EFFECTS_FILTER.BRIGHTNESS]: { style: 'brightness', unit: '' },
 };
 
-const sliderOptions = {
-  [effects.NONE]: { min: 0, max: 100, step: 1 },
-  [effects.GRAYSCALE]: { min: 0, max: 1, step: 0.1 },
-  [effects.SEPIA]: { min: 0, max: 1, step: 0.1 },
-  [effects.INVERT]: { min: 0, max: 100, step: 1 },
-  [effects.BLUR]: { min: 0, max: 3, step: 0.1 },
-  [effects.BRIGHTNESS]: { min: 1, max: 3, step: 0.1 },
+const SLIDER_CONFIG = {
+  [EFFECTS_FILTER.NONE]: { min: 0, max: 100, step: 1 },
+  [EFFECTS_FILTER.GRAYSCALE]: { min: 0, max: 1, step: 0.1 },
+  [EFFECTS_FILTER.SEPIA]: { min: 0, max: 1, step: 0.1 },
+  [EFFECTS_FILTER.INVERT]: { min: 0, max: 100, step: 1 },
+  [EFFECTS_FILTER.BLUR]: { min: 0, max: 3, step: 0.1 },
+  [EFFECTS_FILTER.BRIGHTNESS]: { min: 1, max: 3, step: 0.1 },
 };
 
 const uploadModal = document.querySelector('.img-upload');
 const previewImage = uploadModal.querySelector('.img-upload__preview img');
-const effectsContainer = uploadModal.querySelector('.effects');
+const effectsContainer = uploadModal.querySelector('.EFFECTS_FILTER');
 const slider = uploadModal.querySelector('.effect-level__slider');
 const sliderWrapper = uploadModal.querySelector('.img-upload__effect-level');
 const effectValue = uploadModal.querySelector('.effect-level__value');
 
-let currentEffect = effects.NONE;
+let currentEffect = EFFECTS_FILTER.NONE;
 
 const applyImageStyle = () => {
-  if (currentEffect === effects.NONE) {
-    return previewImage.style.filter = null;
+  if (currentEffect === EFFECTS_FILTER.NONE) {
+    previewImage.style.filter = null;
+    return;
   }
 
   const { value } = effectValue;
-  const { style, unit } = filterStyles[currentEffect];
+  const { style, unit } = EFFECTS_CONFIG[currentEffect];
   previewImage.style.filter = `${style}(${value}${unit})`;
 };
 
 const updateSlider = () => {
   if (slider.noUiSlider) {
-    const { min, max, step } = sliderOptions[currentEffect];
+    const { min, max, step } = SLIDER_CONFIG[currentEffect];
     slider.noUiSlider.updateOptions({
       range: { min, max },
       step,
       start: max,
     });
   }
+};
+
+const onSliderUpdate = () => {
+  effectValue.value = slider.noUiSlider.get();
+  applyImageStyle();
 };
 
 const createSlider = ({ min, max, step }) => {
@@ -62,11 +68,6 @@ const createSlider = ({ min, max, step }) => {
     connect: 'lower',
   });
   slider.noUiSlider.on('update', onSliderUpdate);
-};
-
-const onSliderUpdate = () => {
-  effectValue.value = slider.noUiSlider.get();
-  applyImageStyle();
 };
 
 const showSlider = () => {
@@ -83,9 +84,9 @@ const hideSlider = () => {
 const configureSlider = () => {
   hideSlider();
 
-  if (currentEffect !== effects.NONE) {
+  if (currentEffect !== EFFECTS_FILTER.NONE) {
     if (!slider.noUiSlider) {
-      createSlider(sliderOptions[currentEffect]);
+      createSlider(SLIDER_CONFIG[currentEffect]);
     } else {
       updateSlider();
     }
@@ -100,7 +101,7 @@ const changeEffect = (effect) => {
 };
 
 const resetEffects = () => {
-  changeEffect(effects.NONE);
+  changeEffect(EFFECTS_FILTER.NONE);
   applyImageStyle();
   if (slider.noUiSlider) {
     slider.noUiSlider.reset();

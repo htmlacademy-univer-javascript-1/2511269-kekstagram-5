@@ -9,28 +9,29 @@ const handleBodyClick = (e) => {
   ) {
     return;
   }
+
   hideMessage();
-}
+};
 
 const handleDocumentKeydown = (e) => {
   if (e.key === 'Escape') {
     e.preventDefault();
     hideMessage();
   }
-}
+};
 
-const hideMessage = () =>  {
+function hideMessage() {
   const messageElement = document.querySelector('.success') || document.querySelector('.error');
   messageElement.remove();
   document.removeEventListener('keydown', handleDocumentKeydown);
   documentBody.removeEventListener('click', handleBodyClick);
 }
 
-const showMessage = (nearesBtnClass, messageElement) => {
+const showMessage = (nearestBtnClass, messageElement) => {
   document.addEventListener('keydown', handleDocumentKeydown);
   documentBody.append(messageElement);
   documentBody.addEventListener('click', handleBodyClick);
-  messageElement.querySelector(nearesBtnClass).addEventListener('click', hideMessage);
+  messageElement.querySelector(nearestBtnClass).addEventListener('click', hideMessage);
 };
 
 const showSuccessMessage = () => {

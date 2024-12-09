@@ -12,11 +12,11 @@ const createPicture = ({comments, description, likes, url, id}) => {
 
 const renderPictures = (pictures, container) => {
   for (const element of container.querySelectorAll('.picture')) {
-    element.remove()
+    element.remove();
   }
 
   const fragment = document.createDocumentFragment();
-  
+
   for (const picture of pictures) {
     const newPicture = createPicture(picture);
     fragment.append(newPicture);

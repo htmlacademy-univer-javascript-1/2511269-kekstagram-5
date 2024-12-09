@@ -9,13 +9,9 @@ const filterElement = document.querySelector('.img-filters');
 let currentFilter = filter.default;
 let pictures = [];
 
-const sortByComments = (firstPic, secondPic) => {
-  return secondPic.comments.length - firstPic.comments.length;
-};
+const sortByComments = (firstPic, secondPic) => secondPic.comments.length - firstPic.comments.length;
 
-const sortByRandom = () => {
-  return Math.random() - 0.5
-};
+const sortByRandom = () => Math.random() - 0.5;
 
 const getFilteredPictures = () => {
   switch (currentFilter) {

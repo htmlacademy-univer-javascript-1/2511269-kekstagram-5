@@ -8,7 +8,7 @@ const uploadForm = document.querySelector('.img-upload__form');
 const modalOverlay = uploadForm.querySelector('.img-upload__overlay');
 const closeButton = uploadForm.querySelector('.img-upload__cancel');
 const fileInput = uploadForm.querySelector('.img-upload__input');
-const descriptionField = uploadForm.querySelector('.text_description');
+const descriptionField = uploadForm.querySelector('.text__description');
 const submitBtn = uploadForm.querySelector('.img-upload__submit');
 const tagsField = uploadForm.querySelector('.text__hashtags');
 const imagePreview = uploadForm.querySelector('.img-upload__preview img');
@@ -99,25 +99,19 @@ closeButton.addEventListener('click', closeModal);
 uploadForm.addEventListener('submit', handleFormSubmit);
 initializeEffects();
 
-const splitTags = (tagString) => {
-  return tagString.trim().split(' ').filter((tag) => Boolean(tag.length));
-};
+const splitTags = (tagString) => tagString.trim().split(' ').filter((tag) => Boolean(tag.length));
 
-const areTagsValid = (value) => {
-  return splitTags(value).every((tag) => TAG_PATTERN.test(tag));
-};
+const areTagsValid = (value) => splitTags(value).every((tag) => TAG_PATTERN.test(tag));
 
-const isTagCountValid = (value) => {
-  return splitTags(value).length <= MAX_TAGS;
-};
+const isTagCountValid = (value) => splitTags(value).length <= MAX_TAGS;
 
 const areTagsUnique = (value) => {
   const lowerCaseTags = splitTags(value).map((tag) => tag.toLowerCase());
   return lowerCaseTags.length === new Set(lowerCaseTags).size;
 };
 
-pristine.addValidator(tagsField, areTagsUnique, 'Хешетеги должны быть уникальными', 1, true);
+pristine.addValidator(tagsField, areTagsUnique, 'Хештеги должны быть уникальными', 1, true);
 pristine.addValidator(tagsField, areTagsValid, 'Некорректный хештег', 2, true);
 pristine.addValidator(tagsField, isTagCountValid, `Лимит ${MAX_TAGS} хештегов превышен`, 3, true);
 
-setupFormSubmit()
+setupFormSubmit();
