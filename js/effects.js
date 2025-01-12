@@ -1,4 +1,4 @@
-const EFFECTS_FILTER = {
+const EffectsFilters = {
   NONE: 'none',
   GRAYSCALE: 'chrome',
   SEPIA: 'sepia',
@@ -8,33 +8,33 @@ const EFFECTS_FILTER = {
 };
 
 const EFFECTS_CONFIG = {
-  [EFFECTS_FILTER.GRAYSCALE]: { style: 'grayscale', unit: '' },
-  [EFFECTS_FILTER.SEPIA]: { style: 'sepia', unit: '' },
-  [EFFECTS_FILTER.INVERT]: { style: 'invert', unit: '%' },
-  [EFFECTS_FILTER.BLUR]: { style: 'blur', unit: 'px' },
-  [EFFECTS_FILTER.BRIGHTNESS]: { style: 'brightness', unit: '' },
+  [EffectsFilters.GRAYSCALE]: { style: 'grayscale', unit: '' },
+  [EffectsFilters.SEPIA]: { style: 'sepia', unit: '' },
+  [EffectsFilters.INVERT]: { style: 'invert', unit: '%' },
+  [EffectsFilters.BLUR]: { style: 'blur', unit: 'px' },
+  [EffectsFilters.BRIGHTNESS]: { style: 'brightness', unit: '' },
 };
 
 const SLIDER_CONFIG = {
-  [EFFECTS_FILTER.NONE]: { min: 0, max: 100, step: 1 },
-  [EFFECTS_FILTER.GRAYSCALE]: { min: 0, max: 1, step: 0.1 },
-  [EFFECTS_FILTER.SEPIA]: { min: 0, max: 1, step: 0.1 },
-  [EFFECTS_FILTER.INVERT]: { min: 0, max: 100, step: 1 },
-  [EFFECTS_FILTER.BLUR]: { min: 0, max: 3, step: 0.1 },
-  [EFFECTS_FILTER.BRIGHTNESS]: { min: 1, max: 3, step: 0.1 },
+  [EffectsFilters.NONE]: { min: 0, max: 100, step: 1 },
+  [EffectsFilters.GRAYSCALE]: { min: 0, max: 1, step: 0.1 },
+  [EffectsFilters.SEPIA]: { min: 0, max: 1, step: 0.1 },
+  [EffectsFilters.INVERT]: { min: 0, max: 100, step: 1 },
+  [EffectsFilters.BLUR]: { min: 0, max: 3, step: 0.1 },
+  [EffectsFilters.BRIGHTNESS]: { min: 1, max: 3, step: 0.1 },
 };
 
 const uploadModal = document.querySelector('.img-upload');
 const previewImage = uploadModal.querySelector('.img-upload__preview img');
-const effectsContainer = uploadModal.querySelector('.EFFECTS_FILTER');
-const slider = uploadModal.querySelector('.effect-level__slider');
+const effectsContainer = uploadModal.querySelector('.img-upload__effects');
 const sliderWrapper = uploadModal.querySelector('.img-upload__effect-level');
-const effectValue = uploadModal.querySelector('.effect-level__value');
+const slider = sliderWrapper.querySelector('.effect-level__slider');
+const effectValue = sliderWrapper.querySelector('.effect-level__value');
 
-let currentEffect = EFFECTS_FILTER.NONE;
+let currentEffect = EffectsFilters.NONE;
 
 const applyImageStyle = () => {
-  if (currentEffect === EFFECTS_FILTER.NONE) {
+  if (currentEffect === EffectsFilters.NONE) {
     previewImage.style.filter = null;
     return;
   }
@@ -84,7 +84,7 @@ const hideSlider = () => {
 const configureSlider = () => {
   hideSlider();
 
-  if (currentEffect !== EFFECTS_FILTER.NONE) {
+  if (currentEffect !== EffectsFilters.NONE) {
     if (!slider.noUiSlider) {
       createSlider(SLIDER_CONFIG[currentEffect]);
     } else {
@@ -101,7 +101,7 @@ const changeEffect = (effect) => {
 };
 
 const resetEffects = () => {
-  changeEffect(EFFECTS_FILTER.NONE);
+  changeEffect(EffectsFilters.NONE);
   applyImageStyle();
   if (slider.noUiSlider) {
     slider.noUiSlider.reset();

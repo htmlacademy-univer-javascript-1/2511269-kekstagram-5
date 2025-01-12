@@ -1,18 +1,18 @@
-import { resetScale } from './scale.js';
-import { initializeEffects, resetEffects } from './effects.js';
-import { showSuccessMessage, showErrorMessage } from './message.js';
-import { submitData } from './api.js';
+import {resetScale} from './scale.js';
+import {initializeEffects, resetEffects} from './effects.js';
+import {showSuccessMessage, showErrorMessage} from './message.js';
+import {submitData} from './api.js';
 
 const documentBody = document.querySelector('body');
-const uploadForm = document.querySelector('.img-upload__form');
+const uploadForm = documentBody.querySelector('.img-upload__form');
 const modalOverlay = uploadForm.querySelector('.img-upload__overlay');
-const closeButton = uploadForm.querySelector('.img-upload__cancel');
+const closeButton = modalOverlay.querySelector('.img-upload__cancel');
 const fileInput = uploadForm.querySelector('.img-upload__input');
-const descriptionField = uploadForm.querySelector('.text__description');
-const submitBtn = uploadForm.querySelector('.img-upload__submit');
-const tagsField = uploadForm.querySelector('.text__hashtags');
-const imagePreview = uploadForm.querySelector('.img-upload__preview img');
-const effectPreviews = uploadForm.querySelectorAll('.effects__preview');
+const descriptionField = modalOverlay.querySelector('.text__description');
+const submitBtn = modalOverlay.querySelector('.img-upload__submit');
+const tagsField = modalOverlay.querySelector('.text__hashtags');
+const imagePreview = modalOverlay.querySelector('.img-upload__preview img');
+const effectPreviews = modalOverlay.querySelectorAll('.effects__preview');
 const ALLOWED_FILE_TYPES = ['jpg', 'jpeg', 'png'];
 const MAX_TAGS = 5;
 const TAG_PATTERN = /^#[a-zа-яё0-9]{1,19}$/i;
@@ -26,11 +26,11 @@ const pristine = new Pristine(uploadForm, {
 const openModal = () => {
   documentBody.classList.add('modal-open');
   modalOverlay.classList.remove('hidden');
-  document.addEventListener('keydown', handleKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
 };
 
-const closeModal = () => {
-  document.removeEventListener('keydown', handleKeydown);
+const onModalClose = () => {
+  document.removeEventListener('keydown', onDocumentKeydown);
   uploadForm.reset();
   resetScale();
   resetEffects();
@@ -49,15 +49,15 @@ const isFileTypeValid = (file) => {
   return ALLOWED_FILE_TYPES.some((type) => fileName.endsWith(type));
 };
 
-function handleKeydown(e) {
+function onDocumentKeydown(e) {
   const isFieldFocused = document.activeElement === tagsField || document.activeElement === descriptionField;
   if (e.key === 'Escape' && !isFieldFocused) {
     e.preventDefault();
-    closeModal();
+    onModalClose();
   }
 }
 
-const handleFileChange = () => {
+const onFileChange = () => {
   const file = fileInput.files[0];
 
   if (file && isFileTypeValid(file)) {
@@ -70,33 +70,35 @@ const handleFileChange = () => {
   openModal();
 };
 
-const setupFormSubmit = () => {
-  uploadForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const isValid = pristine.validate();
+const formValidateHandler = async (e) => {
+  e.preventDefault();
+  const isValid = pristine.validate();
 
-    if (isValid) {
-      toggleButtonState(true);
-      try {
-        await submitData(new FormData(uploadForm));
-        closeModal();
-        showSuccessMessage();
-      } catch {
-        showErrorMessage();
-      }
-      toggleButtonState(false);
+  if (isValid) {
+    toggleButtonState(true);
+    try {
+      await submitData(new FormData(uploadForm));
+      onModalClose();
+      showSuccessMessage();
+    } catch {
+      showErrorMessage();
     }
-  });
+    toggleButtonState(false);
+  }
 };
 
-const handleFormSubmit = (e) => {
+const setupFormSubmit = () => {
+  uploadForm.addEventListener('submit', formValidateHandler);
+};
+
+const onFormSubmit = (e) => {
   e.preventDefault();
   pristine.validate();
 };
 
-fileInput.addEventListener('change', handleFileChange);
-closeButton.addEventListener('click', closeModal);
-uploadForm.addEventListener('submit', handleFormSubmit);
+fileInput.addEventListener('change', onFileChange);
+closeButton.addEventListener('click', onModalClose);
+uploadForm.addEventListener('submit', onFormSubmit);
 initializeEffects();
 
 const splitTags = (tagString) => tagString.trim().split(' ').filter((tag) => Boolean(tag.length));
