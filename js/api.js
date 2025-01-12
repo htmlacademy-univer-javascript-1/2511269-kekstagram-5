@@ -1,16 +1,16 @@
 const BASE_URL = 'https://29.javascript.htmlacademy.pro/kekstagram';
 
-const routes = {
+const Routes = {
   GET: '/data',
   POST: '/',
 };
 
-const httpMethod = {
+const HttpMethods = {
   GET: 'GET',
   POST: 'POST',
 };
 
-const errorMessages = {
+const ErrorMessages = {
   GET: 'Не удалось получить данные',
   POST: 'Не удалось отправить данные',
 };
@@ -27,7 +27,7 @@ const request = async (route, errorMessage, method, body = null) => {
   }
 };
 
-const submitData = async(body) => await request(routes.POST, errorMessages.POST, httpMethod.POST, body);
-const fetchData = async() => await request(routes.GET, errorMessages.GET, httpMethod.GET);
+const submitData = async (body) => await request(Routes.POST, ErrorMessages.POST, HttpMethods.POST, body);
+const fetchData = async () => await request(Routes.GET, ErrorMessages.GET, HttpMethods.GET);
 
 export{submitData, fetchData};

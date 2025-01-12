@@ -2,9 +2,10 @@ const pictureTemplate = document.querySelector('#picture').content.querySelector
 
 const createPicture = ({comments, description, likes, url, id}) => {
   const picture = pictureTemplate.cloneNode(true);
+  const pictureImg = picture.querySelector('.picture__img');
   picture.dataset.pictureId = id;
-  picture.querySelector('.picture__img').src = url;
-  picture.querySelector('.picture__img').alt = description;
+  pictureImg.src = url;
+  pictureImg.alt = description;
   picture.querySelector('.picture__likes').textContent = likes;
   picture.querySelector('.picture__comments').textContent = comments.length;
   return picture;

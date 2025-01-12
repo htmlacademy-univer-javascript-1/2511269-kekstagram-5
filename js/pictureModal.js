@@ -1,12 +1,12 @@
 const COMMENTS_BATCH_SIZE = 5;
 const pageBody = document.querySelector('body');
-const pictureModal = document.querySelector('.big-picture');
+const pictureModal = pageBody.querySelector('.big-picture');
 const loadMoreCommentsButton = pictureModal.querySelector('.comments-loader');
 const closeButton = pictureModal.querySelector('.big-picture__cancel');
 const totalCommentCount = pictureModal.querySelector('.comments-count');
 const displayedCommentCount = pictureModal.querySelector('.comments-shown-count');
 const commentContainer = pictureModal.querySelector('.social__comments');
-const commentTemplate = document.querySelector('.social__comment');
+const commentTemplate = commentContainer.querySelector('.social__comment');
 
 let visibleComments = 0;
 let allComments = [];
@@ -19,7 +19,7 @@ const generateCommentElement = ({ avatar, name, message }) => {
   return comment;
 };
 
-const displayComments = () => {
+const onCommentsDisplay = () => {
   visibleComments += COMMENTS_BATCH_SIZE;
 
   if (visibleComments >= allComments.length) {
@@ -42,7 +42,7 @@ const displayComments = () => {
   displayedCommentCount.textContent = visibleComments;
 };
 
-loadMoreCommentsButton.addEventListener('click', displayComments);
+loadMoreCommentsButton.addEventListener('click', onCommentsDisplay);
 
 const renderPictureInfo = ({ url, likes, description }) => {
   pictureModal.querySelector('.likes-count').textContent = likes;
@@ -52,33 +52,33 @@ const renderPictureInfo = ({ url, likes, description }) => {
   img.alt = description;
 };
 
-const handleKeydown = (e) => {
+const onDocumentKeydown = (e) => {
   if (e.key === 'Escape') {
     e.preventDefault();
-    closePictureModal();
+    onPictureModalClose();
   }
 };
 
-function closePictureModal() {
+function onPictureModalClose() {
   visibleComments = 0;
   pictureModal.classList.add('hidden');
   pageBody.classList.remove('modal-open');
-  document.removeEventListener('keydown', handleKeydown);
+  document.removeEventListener('keydown', onDocumentKeydown);
 }
 
 const openPictureModal = (data) => {
   allComments = data.comments;
-  document.addEventListener('keydown', handleKeydown);
+  document.addEventListener('keydown', onDocumentKeydown);
   pageBody.classList.add('modal-open');
   loadMoreCommentsButton.classList.add('hidden');
   pictureModal.classList.remove('hidden');
   renderPictureInfo(data);
 
   if (allComments.length > 0) {
-    displayComments();
+    onCommentsDisplay();
   }
 };
 
-closeButton.addEventListener('click', closePictureModal);
+closeButton.addEventListener('click', onPictureModalClose);
 
 export { openPictureModal };

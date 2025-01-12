@@ -3,7 +3,7 @@ import { openPictureModal } from './pictureModal.js';
 
 const container = document.querySelector('.pictures');
 
-const handlePictureClick = (e, pictures) => {
+const onPictureClick = (e, pictures) => {
   const picture = e.target.closest('[data-picture-id]');
 
   if (!picture) {
@@ -20,7 +20,7 @@ const handlePictureClick = (e, pictures) => {
 
 const renderGallery = (pictures) => {
   renderPictures(pictures, container);
-  container.addEventListener('click', (e) => handlePictureClick(e, pictures));
+  container.addEventListener('click', (e) => onPictureClick(e, pictures));
 };
 
 export { renderGallery };
